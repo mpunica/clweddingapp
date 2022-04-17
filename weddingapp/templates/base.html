@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+            <head><meta charset="utf-8"></head>
+<!--            < link  rel =" arkusz stylów " href =" ścieżka/do/css/air.css " >-->
+            <body>
+                <h1>{% block main_header %}
+                    Bride&Groom - WeddingApp
+                    {% endblock %}</h1>
+                {% block content %}
+                {% endblock %}
+
+            {% block footer %}
+              {% if user.is_authenticated %}
+              Zalogowany: {{ user }} <a href="{% url 'logout' %}">Wyloguj</a>
+              {% else %}
+              <a href="{% url 'login' %}">Zaloguj się</a>
+              {% endif %}
+            {% endblock %}
+            </body>
+</html>
