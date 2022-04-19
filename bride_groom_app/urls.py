@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from weddingapp.views import Login, Logout, AddUser, ResetPassword, AddGuestView, GuestView, MainWeddingView, AddGuestView, AddBrideGroomView
+from weddingapp.views import Login, Logout, AddUser, ResetPassword, AddGuestView, GuestView, MainWeddingView, AddGuestView, AddBrideGroomView, ListGuests
 
 
 urlpatterns = [
@@ -28,5 +28,6 @@ urlpatterns = [
     path('reset_password/<int:user_id>/', ResetPassword.as_view(), name="reset-password"),
     path('add_guest/', AddGuestView.as_view(), name="add-guest"),
     path('guest/<int:guest_id>/', GuestView.as_view(), name="guest"),
+    path('list_guest/', ListGuests.as_view(), name="all-guests"),
     path('add_bridegroom/', AddBrideGroomView.as_view(), name="add-bridegroom"),
 ]

@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>Goście:</h2>
+<ul>
+  {% for guest in guests %}
+  <li>gość: {{ guest.first_name }} ,  {{ guest.last_name }}</li>
+  {% endfor %}
+</ul>
+{% endblock %}

@@ -128,3 +128,9 @@ class GuestView(View):
         ctx["presents"] = Present.objects.order_by("present_name").all()
         ctx["seattables"] = SeatTable.objects.order_by("table_nr").all()
         return render(request, "guest.html", ctx)
+
+class ListGuests(TemplateView):
+    template_name = "all_guests.html"
+
+    def get_context_data(self):
+        return {"guests": Guest.objects.all()}
