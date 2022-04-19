@@ -1,3 +1,6 @@
+"""
+Django forms for coderslab app.
+"""
 from django import forms
 from django.core.validators import EmailValidator, URLValidator, ValidationError
 from django.contrib.auth.models import User

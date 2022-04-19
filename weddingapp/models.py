@@ -1,3 +1,6 @@
+"""
+Django models for coderslab app.
+"""
 from django.db import models
 
 BrideGroom_choice = (

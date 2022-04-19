@@ -1,3 +1,6 @@
+"""
+Django views for coderslab app.
+"""
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect, Http404
 from django.views import View
@@ -19,6 +22,7 @@ from .forms import (
 
 from .models import BrideGroom_choice, BrideGroom, Guest, Present, SeatTable, Messages
 
+# main view
 class MainWeddingView(View):
     def get(self, request):
         return render(request, "index.html")
@@ -26,6 +30,7 @@ class MainWeddingView(View):
 #         ctx = {"school_classes": SCHOOL_CLASS}
 #         return render(request, "index.html", ctx)
 
+# to check if user is a superuser
 class SuperUserCheck(UserPassesTestMixin, View):
     def test_func(self):
         return self.request.user.is_superuser
@@ -48,6 +53,7 @@ class SuperUserCheck(UserPassesTestMixin, View):
 #             return HttpResponse("Błąd logowania")
 #         return render(request, "login_form.html", ctx)
 
+# login view
 class Login(FormView):
     form_class = LoginForm
     template_name = "login_form.html"
@@ -62,6 +68,7 @@ class Login(FormView):
             return HttpResponse("Błąd logowania")
         return redirect(reverse("index"))
 
+# logout view
 class Logout(LoginRequiredMixin, View):
     def get(self, request):
         return render(request, "logout.html")
@@ -70,11 +77,13 @@ class Logout(LoginRequiredMixin, View):
         logout(request)
         return redirect(reverse("index"))
 
+# add new user
 class AddUser(LoginRequiredMixin, CreateView):
     form_class = AddUserForm
     template_name = "add_user.html"
     success_url = reverse_lazy("index")
 
+# reset users password
 class ResetPassword(LoginRequiredMixin, PermissionRequiredMixin, FormView):
     permission_required = "auth.change_user"
     form_class = ResetPasswordForm
@@ -94,6 +103,7 @@ class ResetPassword(LoginRequiredMixin, PermissionRequiredMixin, FormView):
         user.save()
         return redirect(self.success_url)
 
+# add names of Bride and Groom
 class AddBrideGroomView(SuperUserCheck, FormView):
         form_class = AddBrideGroomForm
         template_name = "add_bridegroom.html"
@@ -107,7 +117,7 @@ class AddBrideGroomView(SuperUserCheck, FormView):
             self.success_url = f"/"
             return super().form_valid(form)
 
-
+# add new guest
 class AddGuestView(SuperUserCheck, FormView):
     form_class = AddGuestForm
     template_name = "add_guest.html"
@@ -125,7 +135,7 @@ class AddGuestView(SuperUserCheck, FormView):
         self.success_url = f"/guest/{new_guest.id}"
         return super().form_valid(form)
 
-
+# generate guest view
 class GuestView(LoginRequiredMixin, View):
     def get(self, request, guest_id):
         ctx = {}
@@ -135,6 +145,7 @@ class GuestView(LoginRequiredMixin, View):
         ctx["seattables"] = SeatTable.objects.order_by("table_nr").all()
         return render(request, "guest.html", ctx)
 
+# generate guests list
 class ListGuests(SuperUserCheck, TemplateView):
     template_name = "all_guests.html"
 
