@@ -30,23 +30,23 @@ class SuperUserCheck(UserPassesTestMixin, View):
     def test_func(self):
         return self.request.user.is_superuser
 
-class LoginView(View):
-    def get(self, request):
-        form = LoginForm()
-        return render(request, "login_form.html", {"form": form})
-
-    def post(self, request):
-        form = LoginForm(request.POST)
-        ctx = {"form": form}
-
-        if form.is_valid():
-            if (
-                form.cleaned_data["login"] == "root"
-                and form.cleaned_data["password"] == "very_secret"
-            ):
-                return HttpResponse("Miło Cię widzieć")
-            return HttpResponse("Błąd logowania")
-        return render(request, "login_form.html", ctx)
+# class LoginView(View):
+#     def get(self, request):
+#         form = LoginForm()
+#         return render(request, "login_form.html", {"form": form})
+#
+#     def post(self, request):
+#         form = LoginForm(request.POST)
+#         ctx = {"form": form}
+#
+#         if form.is_valid():
+#             if (
+#                 form.cleaned_data["login"] == "root"
+#                 and form.cleaned_data["password"] == "very_secret"
+#             ):
+#                 return HttpResponse("Miło Cię widzieć")
+#             return HttpResponse("Błąd logowania")
+#         return render(request, "login_form.html", ctx)
 
 class Login(FormView):
     form_class = LoginForm
@@ -62,8 +62,7 @@ class Login(FormView):
             return HttpResponse("Błąd logowania")
         return redirect(reverse("index"))
 
-
-class Logout(View):
+class Logout(LoginRequiredMixin, View):
     def get(self, request):
         return render(request, "logout.html")
 
@@ -71,12 +70,12 @@ class Logout(View):
         logout(request)
         return redirect(reverse("index"))
 
-class AddUser(CreateView):
+class AddUser(LoginRequiredMixin, CreateView):
     form_class = AddUserForm
     template_name = "add_user.html"
     success_url = reverse_lazy("index")
 
-class ResetPassword(PermissionRequiredMixin, FormView):
+class ResetPassword(LoginRequiredMixin, PermissionRequiredMixin, FormView):
     permission_required = "auth.change_user"
     form_class = ResetPasswordForm
     template_name = "reset_password.html"
@@ -127,7 +126,7 @@ class AddGuestView(SuperUserCheck, FormView):
         return super().form_valid(form)
 
 
-class GuestView(View):
+class GuestView(LoginRequiredMixin, View):
     def get(self, request, guest_id):
         ctx = {}
         ctx["guest"] = get_object_or_404(Guest, pk=guest_id)
@@ -136,7 +135,7 @@ class GuestView(View):
         ctx["seattables"] = SeatTable.objects.order_by("table_nr").all()
         return render(request, "guest.html", ctx)
 
-class ListGuests(TemplateView):
+class ListGuests(SuperUserCheck, TemplateView):
     template_name = "all_guests.html"
 
     def get_context_data(self):
