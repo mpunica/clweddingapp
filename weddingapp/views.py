@@ -13,6 +13,7 @@ from .forms import (
     AddUserForm,
     ResetPasswordForm,
     AddGuestForm,
+    AddBrideGroomForm,
 )
 
 from .models import BrideGroom_choice, BrideGroom, Guest, Present, SeatTable, Messages
@@ -89,12 +90,25 @@ class ResetPassword(PermissionRequiredMixin, FormView):
         user.save()
         return redirect(self.success_url)
 
+class AddBrideGroomView(FormView):
+    form_class = AddBrideGroomForm
+    template_name = "add_bridegroom.html"
+
+    def form_valid(self, form):
+        new_bridegroom = BrideGroom.objects.create(
+            name=form.cleaned_data["name"],
+            BrideGroom=form.cleaned_data["BrideGroom"],
+        )
+
+        self.success_url = f"/"
+        return super().form_valid(form)
+
 class AddGuestView(FormView):
     form_class = AddGuestForm
     template_name = "add_guest.html"
 
     def form_valid(self, form):
-        bridegrooms = BrideGroom.objects.get(pk=form.cleaned_data['bridegrooms'])
+        # bridegrooms = BrideGroom.objects.get(pk=form.cleaned_data['bridegrooms'])
         new_guest = Guest.objects.create(
             first_name=form.cleaned_data["first_name"],
             last_name=form.cleaned_data["last_name"],

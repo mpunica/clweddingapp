@@ -52,9 +52,13 @@ class ResetPasswordForm(forms.Form):
             raise ValidationError('Hasła nie pasują do siebie')
         return super().clean()
 
+class AddBrideGroomForm(forms.Form):
+    name = forms.CharField(label="Imię i nazwisko", max_length=64)
+    BrideGroom = forms.ChoiceField(choices=BrideGroom_choice, label="Pani/Pan")
+
 class AddGuestForm(forms.Form):
     first_name = forms.CharField(label="Imię gościa", max_length=64)
     last_name = forms.CharField(label="Nazwisko gościa", max_length=64)
     is_child = forms.BooleanField(required=False, label="Dziecko")
     bridegrooms = forms.ModelChoiceField(queryset=BrideGroom.objects.all(), label="Od kogo gość")
-    in_confirmed = forms.BooleanField(required=True, label="Swiętuję razem z Parą Młodą")
+    in_confirmed = forms.BooleanField(required=False, label="Swiętuję razem z Parą Młodą")
