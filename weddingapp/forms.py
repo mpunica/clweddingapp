@@ -56,5 +56,5 @@ class AddGuestForm(forms.Form):
     first_name = forms.CharField(label="Imię gościa", max_length=64)
     last_name = forms.CharField(label="Nazwisko gościa", max_length=64)
     is_child = forms.BooleanField(required=False, label="Dziecko")
-    bridegrooms = forms.ChoiceField(choices=BrideGroom_choice)
+    bridegrooms = forms.ModelChoiceField(queryset=BrideGroom.objects.all(), label="Od kogo gość")
     in_confirmed = forms.BooleanField(required=True, label="Swiętuję razem z Parą Młodą")

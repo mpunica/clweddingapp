@@ -94,6 +94,7 @@ class AddGuestView(FormView):
     template_name = "add_guest.html"
 
     def form_valid(self, form):
+        bridegrooms = BrideGroom.objects.get(pk=form.cleaned_data['bridegrooms'])
         new_guest = Guest.objects.create(
             first_name=form.cleaned_data["first_name"],
             last_name=form.cleaned_data["last_name"],

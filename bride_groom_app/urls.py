@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from weddingapp.views import Login, Logout, AddUser, ResetPassword, AddGuestView, GuestView, MainWeddingView
+from weddingapp.views import Login, Logout, AddUser, ResetPassword, AddGuestView, GuestView, MainWeddingView, AddGuestView
 
 
 urlpatterns = [
