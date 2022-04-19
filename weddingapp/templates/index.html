@@ -13,7 +13,9 @@
               {% if user.is_authenticated %}
               Zalogowany: {{ user }} <a href="{% url 'logout' %}">Wyloguj</a>
               {% else %}
-              <a href="{% url 'login' %}">Zaloguj się</a>
+                <a href="{% url 'login' %}">Zaloguj się</a><br>
+                <a href='/add_user/'> Zarejestruj się </a><br>
+                <br>
               {% endif %}
             {% endblock %}
             </body>

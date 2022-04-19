@@ -15,16 +15,17 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from weddingapp.views import Login, Logout, AddUser, ResetPassword, AddGuestView
+from weddingapp.views import Login, Logout, AddUser, ResetPassword, AddGuestView, GuestView, MainWeddingView
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('', MainWeddingView.as_view(), name="index"),
+    path('', MainWeddingView.as_view(), name="index"),
     # path('login/', LoginView.as_view(), name="login"),
     path('login/', Login.as_view(), name="login"),
     path('logout/', Logout.as_view(), name="logout"),
     path('add_user/', AddUser.as_view(), name="add-user"),
     path('reset_password/<int:user_id>/', ResetPassword.as_view(), name="reset-password"),
     path('add_guest/', AddGuestView.as_view(), name="add-guest"),
+    path('guest/<int:guest_id>/', GuestView.as_view(), name="guest"),
 ]

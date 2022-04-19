@@ -17,8 +17,9 @@ from .forms import (
 
 from .models import BrideGroom_choice, BrideGroom, Guest, Present, SeatTable, Messages
 
-# class MainWeddingView(View):
-#     # jakiś widok na początek
+class MainWeddingView(View):
+    def get(self, request):
+        return render(request, "index.html")
 #     def get(self, request):
 #         ctx = {"school_classes": SCHOOL_CLASS}
 #         return render(request, "index.html", ctx)
@@ -93,12 +94,22 @@ class AddGuestView(FormView):
     template_name = "add_guest.html"
 
     def form_valid(self, form):
-        new_student = Student.objects.create(
+        new_guest = Guest.objects.create(
             first_name=form.cleaned_data["first_name"],
             last_name=form.cleaned_data["last_name"],
-            school_class=form.cleaned_data["school_class"],
-            year_of_birth=form.cleaned_data["year_of_birth"],
+            is_child=form.cleaned_data["is_child"],
+            bridegrooms=form.cleaned_data["bridegrooms"],
+            in_confirmed=form.cleaned_data["in_confirmed"],
         )
 
-        self.success_url = f"/student/{new_student.id}"
+        self.success_url = f"/guest/{new_guest.id}"
         return super().form_valid(form)
+
+class GuestView(View):
+    def get(self, request, guest_id):
+        ctx = {}
+        ctx["guest"] = get_object_or_404(Guest, pk=guest_id)
+        ctx["bridegrooms"] = BrideGroom.objects.order_by("name").all()
+        ctx["presents"] = Present.objects.order_by("present_name").all()
+        ctx["seattables"] = SeatTable.objects.order_by("table_nr").all()
+        return render(request, "guest.html", ctx)

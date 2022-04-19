@@ -15,7 +15,7 @@ class Guest(models.Model):
     first_name = models.CharField(max_length=64)
     last_name = models.CharField(max_length=64)
     is_child = models.BooleanField()
-    bridegrooms = models.ForeignKey(BrideGroom,  on_delete=models.CASCADE)
+    bridegrooms = models.ForeignKey(BrideGroom, on_delete=models.CASCADE)
     in_confirmed = models.BooleanField()
 
     @property
