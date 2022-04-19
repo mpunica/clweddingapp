@@ -6,6 +6,7 @@ from django.views.generic import TemplateView
 from django.urls import reverse_lazy, reverse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from .forms import (
     LoginForm,
@@ -24,6 +25,10 @@ class MainWeddingView(View):
 #     def get(self, request):
 #         ctx = {"school_classes": SCHOOL_CLASS}
 #         return render(request, "index.html", ctx)
+
+class SuperUserCheck(UserPassesTestMixin, View):
+    def test_func(self):
+        return self.request.user.is_superuser
 
 class LoginView(View):
     def get(self, request):
@@ -90,20 +95,21 @@ class ResetPassword(PermissionRequiredMixin, FormView):
         user.save()
         return redirect(self.success_url)
 
-class AddBrideGroomView(FormView):
-    form_class = AddBrideGroomForm
-    template_name = "add_bridegroom.html"
+class AddBrideGroomView(SuperUserCheck, FormView):
+        form_class = AddBrideGroomForm
+        template_name = "add_bridegroom.html"
 
-    def form_valid(self, form):
-        new_bridegroom = BrideGroom.objects.create(
-            name=form.cleaned_data["name"],
-            BrideGroom=form.cleaned_data["BrideGroom"],
-        )
+        def form_valid(self, form):
+            new_bridegroom = BrideGroom.objects.create(
+                name=form.cleaned_data["name"],
+                BrideGroom=form.cleaned_data["BrideGroom"],
+            )
 
-        self.success_url = f"/"
-        return super().form_valid(form)
+            self.success_url = f"/"
+            return super().form_valid(form)
 
-class AddGuestView(FormView):
+
+class AddGuestView(SuperUserCheck, FormView):
     form_class = AddGuestForm
     template_name = "add_guest.html"
 
@@ -119,6 +125,7 @@ class AddGuestView(FormView):
 
         self.success_url = f"/guest/{new_guest.id}"
         return super().form_valid(form)
+
 
 class GuestView(View):
     def get(self, request, guest_id):
