@@ -6,6 +6,10 @@
                 <h1>{% block main_header %}
                     Bride&Groom - WeddingApp
                     {% endblock %}</h1>
+                <br>
+                <a href="{% url 'add_bridegroom' %}">Dodaj Państwa Młodych</a><br>
+                <a href="{% url 'add_guest' %}">Dodaj Gościa</a><br>
+                <br>
                 {% block content %}
                 {% endblock %}
 
