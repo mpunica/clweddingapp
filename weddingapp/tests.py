@@ -36,6 +36,15 @@ def test_logout_view():
     assert response.status_code == 200
 
 @pytest.mark.django_db
+def test_post_endpoint():
+    u = User.objects.create_user(username="user222", password="user222")
+    c = Client()
+    c.login(username="user222", password="user222")
+    response = c.get('/logout/',
+                      {"username": "user222", "password":"user222"}, enforce_csrf_checks=True)
+    assert response.status_code == 200
+
+@pytest.mark.django_db
 def test_add_bridegroom1():
     u = User.objects.create_user(username="admin", password="admin", is_superuser=True)
     c = Client()
@@ -55,11 +64,28 @@ def test_add_bridegroom2():
     assert len(BrideGroom.objects.all()) == 1
 
 @pytest.mark.django_db
-def test_post_endpoint():
-    u = User.objects.create_user(username="user222", password="user222")
+def test_add_guest1():
+    u = User.objects.create_user(username="adminG", password="adminG", is_superuser=True)
     c = Client()
-    c.login(username="user222", password="user222")
-    response = c.get('/logout/',
-                      {"username": "user222", "password":"user222"}, enforce_csrf_checks=True)
+    c.login(username="adminG", password="adminG")
+    response = c.get('/add_guest/', )
     assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_add_guest2():
+    u = User.objects.create_user(username="adminG", password="adminG", is_superuser=True)
+    assert len(Guest.objects.all()) == 0
+    c = Client()
+    c.login(username="adminG", password="adminG")
+    bg = BrideGroom.objects.create(name="paniMM", BrideGroom="0")
+    response = c.post('/add_guest/',
+                      {"first_name": "guestFN111",
+                       "last_name": "guestLN111",
+                       "is_child": True,
+                       "bridegrooms": bg,
+                       "in_confirmed": True
+                       }, follow=True)
+    assert response.status_code == 200
+    assert len(BrideGroom.objects.all()) == 1
 
