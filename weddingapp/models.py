@@ -12,7 +12,7 @@ class BrideGroom(models.Model):
     BrideGroom = models.IntegerField(choices=BrideGroom_choice)
 
     def __str__(self):
-        return f"{self.name} - {self.BrideGroom}"
+        return f"{self.name}"
 
 class Guest(models.Model):
     first_name = models.CharField(max_length=64)

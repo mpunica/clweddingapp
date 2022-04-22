@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 
- <h2> Gość do: {{ bridegrooms.name}}</h2>
+ <h2> Gość do: {{ guest.bridegrooms}}</h2>
 
 {{ guest.first_name }} {{ guest.last_name }}
  <h3> nr stolika: {{ guest.get_seattables_display }}</h3>
