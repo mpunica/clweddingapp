@@ -165,7 +165,6 @@ class GuestView(LoginRequiredMixin, View):
         guest = Guest.objects.get(id=guest_id)
         ctx = {}
         ctx["guest"] = get_object_or_404(Guest, pk=guest_id)
-        # bridegrooms_id =  Guest.objects.get.filter("bridegroom_id")
         ctx["bridegrooms"] = BrideGroom.objects.get(id=guest.bridegrooms_id)
         ctx["presents"] = Present.objects.order_by("present_name").all()
         ctx["seattables"] = SeatTable.objects.order_by("table_nr").all()
