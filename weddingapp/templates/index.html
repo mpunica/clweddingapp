@@ -1,8 +1,11 @@
+{% load static %}
 <!doctype html>
 <html>
             <head><meta charset="utf-8"></head>
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
 <!--            < link  rel =" arkusz stylów " href =" ścieżka/do/css/air.css " >-->
             <body>
+            <img src="{% static 'couple.png' %}"/>
                 <h1>{% block main_header %}
                     Bride&Groom - WeddingApp
                     {% endblock %}</h1>
@@ -21,6 +24,8 @@
                 <a href='/add_user/'> Zarejestruj się </a><br>
                 <br>
               {% endif %}
+                <br>
+                {{now}}
             {% endblock %}
             </body>
 </html>

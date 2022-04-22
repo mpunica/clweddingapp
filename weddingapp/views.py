@@ -164,10 +164,11 @@ class GuestView(LoginRequiredMixin, View):
     def get(self, request, guest_id):
         ctx = {}
         ctx["guest"] = get_object_or_404(Guest, pk=guest_id)
-        ctx["bridegrooms"] = BrideGroom.objects.order_by("name").all()
+        ctx["bridegrooms"] = BrideGroom.objects.get(id=guest_id)
         ctx["presents"] = Present.objects.order_by("present_name").all()
         ctx["seattables"] = SeatTable.objects.order_by("table_nr").all()
         return render(request, "guest.html", ctx)
+
 
 class ListGuests(SuperUserCheck, TemplateView):
     """
